@@ -1,8 +1,10 @@
 const Discord = require('discord.js');
 const { prefix, token } = require('./config.json')
 
+// Creates the Discord Client Object
 const client = new Discord.Client();
 
+// Turning the bot "On"
 client.on('ready', () => {
     console.log('Bot Up and Running');
 });
