@@ -1,14 +1,19 @@
+// Imports
 var admin = require("firebase-admin");
 var serviceAccount = require("")
 
+// Init firebase app with credentials and point to database url
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: ""
   });
 
-const bucket = admin.storage().bucket("gs://daily-avatar.appspot.com/");
+// Storage
+const bucket = admin.storage().bucket("");
 
-// console.log(bucket.getFiles());
-bucket.getFiles().then(response => {
-    console.log(response[0]);
+var image = bucket.file('IMG_1625.JPEG');
+
+// Gets image buffer to be converted into base64
+image.download().then(response => {
+    console.log(response);
 })
