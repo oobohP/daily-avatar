@@ -1,10 +1,11 @@
 const Discord = require('discord.js');
 const { prefix, token } = require('./config.json')
+const server = require('./firebase');
 
 // Creates the Discord Client Object
 const client = new Discord.Client();
 
-// Turning the bot "On"
+// Turning the bot "ON"
 client.on('ready', () => {
     console.log('Bot Up and Running');
 });
@@ -16,13 +17,17 @@ client.on('message', message => {
     }
 
     // Changes currently logged in user avatar
-    // TODO: Pull from api or cloud storage (firebase) random png every time.
-    if (message.content === prefix + 'trigger') {
-        client.user.setAvatar('./ayumu.png')
-            .then(user => console.log('New Avatar Set'))
-            .catch(console.error);
-    }
+    // TODO: 1. Pull from api or cloud storage (firebase) random jpeg every time.
+    //       2. Have this automated to run twice every ten minutes by default and catch for errors if rate limited
 
+    if (message.content === prefix + 'change') {
+        server.getURL().then(response => {
+            console.log(response);
+            client.user.setAvatar(response)
+                .then(user => console.log('New Avatar Set'))
+                .catch(console.error);
+        })
+    }
 });
 
 client.login(token);
