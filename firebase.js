@@ -31,12 +31,11 @@ function getAllFiles() {
 // Gets media link from firebase storage
 // TODO: Add to accept other image extensions, jpg / png / ico and more
 function getURL() {
-  getAllFiles().then(responseArray => {
-    return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
+    getAllFiles().then(responseArray => {
       bucket.file('IMG_' + Math.floor(Math.random() * Math.floor(responseArray)) + '.JPEG').getMetadata().then(response => {
-        // console.log(response[0]["mediaLink"])
         resolve(response[0]["mediaLink"]);
       });
-    })
-  })
+    });
+  });
 }
