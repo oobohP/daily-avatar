@@ -9,27 +9,34 @@ module.exports = {
 
 // Init firebase app with credentials and point to database url
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: ""
-  });
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: ""
+});
 
 // Storage
 const bucket = admin.storage().bucket("");
 
 // Gets all files and their respective metadata from storage
+// Add this for math random in getURL later
 function getAllFiles() {
-  bucket.getFiles().then(response => {
-    console.log(response);
+  return new Promise(function (resolve, reject) {
+    bucket.getFiles().then(response => {
+      response.forEach(image => {
+        resolve(image.length - 1);
+      })
+    })
   });
 }
 
 // Gets media link from firebase storage
-// TODO: Smarter way to check if file doesn't exist. Find a better way instead of math.rand through api.
+// TODO: Add to accept other image extensions, jpg / png / ico and more
 function getURL() {
-  return new Promise(function(resolve, reject) {
-    bucket.file('IMG_' + Math.floor(Math.random() * Math.floor(8)) + '.JPEG').getMetadata().then(response =>{
-      // console.log(response[0]["mediaLink"])
-      resolve(response[0]["mediaLink"]);
-    });
+  getAllFiles().then(responseArray => {
+    return new Promise(function (resolve, reject) {
+      bucket.file('IMG_' + Math.floor(Math.random() * Math.floor(responseArray)) + '.JPEG').getMetadata().then(response => {
+        // console.log(response[0]["mediaLink"])
+        resolve(response[0]["mediaLink"]);
+      });
+    })
   })
 }
