@@ -15,19 +15,22 @@ client.on('message', message => {
     if (message.content === prefix + 'avatar') {
         message.reply(message.author.avatarURL);
     }
+});
 
-    // Changes currently logged in user avatar
-    // TODO: 1. Pull from api or cloud storage (firebase) random jpeg every time.
-    //       2. Have this automated to run twice every ten minutes by default and catch for errors if rate limited
-
-    if (message.content === prefix + 'change') {
-        server.getURL().then(response => {
-            console.log(response);
-            client.user.setAvatar(response)
-                .then(user => console.log('New Avatar Set'))
-                .catch(console.error);
-        })
+// Changes Discord Image Every Six Minutes after using command
+client.on('message', message => {
+    
+    if (message.content === prefix + 'start') {
+	console.log('Avatar Interval Started');
+	setInterval(function() {
+	  server.getURL().then(response => {
+	      client.user.setAvatar(response)
+		  .then(user => console.log('New Avatar Set'))
+		  .catch(console.error);
+            })
+	}, 360000);
     }
 });
+
 
 client.login(token);
