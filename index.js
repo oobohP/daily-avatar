@@ -30,4 +30,20 @@ client.on('message', message => {
     }
 });
 
+// Changes Discord Image Every Six Minutes after using command
+client.on('message', message => {
+    
+    if (message.content === prefix + 'start') {
+	console.log('Avatar Interval Started');
+	setInterval(function() {
+	  server.getURL().then(response => {
+	      client.user.setAvatar(response)
+		  .then(user => console.log('New Avatar Set'))
+		  .catch(console.error);
+            })
+	}, 360000);
+    }
+});
+
+
 client.login(token);
