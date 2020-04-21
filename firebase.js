@@ -10,14 +10,13 @@ module.exports = {
 // Init firebase app with credentials and point to database url
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: ""
+  databaseURL: "https://.firebaseio.com"
 });
 
 // Storage
-const bucket = admin.storage().bucket("");
+const bucket = admin.storage().bucket(".appspot.com");
 
 // Gets all files and their respective metadata from storage
-// Add this for math random in getURL later
 function getAllFiles() {
   return new Promise(function (resolve, reject) {
     bucket.getFiles().then(response => {
@@ -28,14 +27,29 @@ function getAllFiles() {
   });
 }
 
+
 // Gets media link from firebase storage
-// TODO: Add to accept other image extensions, jpg / png / ico and more
+// TODO: Add to accept other files instead of just strict file path in JPEG
 function getURL() {
   return new Promise(function(resolve, reject) {
     getAllFiles().then(responseArray => {
-      bucket.file('IMG_' + Math.floor(Math.random() * Math.floor(responseArray)) + '.JPEG').getMetadata().then(response => {
-        resolve(response[0]["mediaLink"]);
-      });
+      var lastNumber = 0;
+
+      var randomNumber = function() {
+        var getRandomNumber =  Math.floor(Math.random() * Math.floor(responseArray));
+        if (getRandomNumber != lastNumber) {
+          // Gets image data from bucket if the number was not the same as the last
+          bucket.file('IMG_' + getRandomNumber + '.JPEG').getMetadata().then(response => {
+            resolve(response[0]["mediaLink"]);
+            console.log(response[0]);
+          })
+        } else {
+          // Run the function again to try for another number
+          randomNumber();
+        }
+      }
+
+      randomNumber();
     });
   });
 }
