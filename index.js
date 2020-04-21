@@ -10,8 +10,8 @@ client.on('ready', () => {
     console.log('Bot Up and Running');
 });
 
+// Shows users avatar and mentions them in the return.
 client.on('message', message => {
-    // Testing Avatar Function URL
     if (message.content === prefix + 'avatar') {
         message.reply(message.author.avatarURL);
     }
