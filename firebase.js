@@ -41,7 +41,7 @@ function getURL() {
           // Gets image data from bucket if the number was not the same as the last
           bucket.file('IMG_' + getRandomNumber + '.JPEG').getMetadata().then(response => {
             resolve(response[0]["mediaLink"]);
-            console.log(response[0]);
+            console.log(response[0].id); //ID and link of image
           })
         } else {
           // Run the function again to try for another number
