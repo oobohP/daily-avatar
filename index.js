@@ -10,6 +10,11 @@ client.on('ready', () => {
     console.log('Bot Up and Running');
 });
 
+// Error Handling for Discord.js Client
+client.on('error', (err) => {
+    console.log(err.message);
+})
+
 // Shows users avatar and mentions them in the return.
 client.on('message', message => {
     if (message.content === prefix + 'avatar') {
